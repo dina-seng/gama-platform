@@ -1,0 +1,71 @@
+/**
+* Name: UrbanEvacuationSimulations
+* Based on the internal empty template. 
+* Author: ADMIN
+* Tags: 
+*/
+
+
+model UrbanEvacuationSimulations
+
+/* Insert your model definition here */
+global{
+	
+	file shape_file_roads <- shape_file("../includes/roads.shp");
+	
+	file shape_file_buildings <- shape_file("../includes/buildings.shp");
+	
+	file shape_file_safe_zones <- shape_file("../includes/safe_zones.shp");
+	
+	geometry shape <- envelope(shape_file_roads);
+	
+	int total_evacuationed <- 0; 
+	float average_congestion <- 0.0; 
+	
+	graph road_network; 
+	map<road, float> road_weights;
+	
+	init { 
+		 
+		create road from: shape_file_roads; 
+		road_network <- as_edge_graph(road); 
+		
+		//prevent unknown file 
+		if(file_exists("../includes/buildings.shp") and file_exists("../includes/safe_zones.shp")){
+			create building from:  shape_file_buildings; 
+			create safe_zone from: shape_file_safe_zones; 
+		}else { 
+			//fallback 
+			do generate_synthetic_data; 
+		}
+		
+		
+		//spawn vehicle 
+		ask building {
+			create vehicle {
+				location <- myself.location;
+				target_zone <- one_of(safe_zone); 
+			}
+		}
+		
+		// falback actions 
+		action generate_synthetic_data {
+			ask 50 among road { 
+				create building {location <- any_location_in(self.shape) + {rnd(-15,15), rnd(-15,15)}; }
+			}
+			ask 3 among road { 
+				create safe_zone {location <- first(self.shape.points);}
+			}
+		}
+		
+		
+		reflex recalculate when: every(5 #cycle){
+			road_weights <- road as_map (each :: (each.shape.perimeter * (1.0 + each.congestion))); 
+			average_congestion <- mean(road collect each.congestion);
+		}
+		
+	}
+	
+}
+
+

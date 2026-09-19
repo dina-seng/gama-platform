@@ -1,0 +1,170 @@
+/**
+* Name: UrbanEvacuationSimulations
+* Based on the internal empty template. 
+* Author: ADMIN
+* Tags: 
+*/
+
+
+model UrbanEvacuationSimulations
+
+/* Insert your model definition here */
+global{
+	
+	file shape_file_roads <- shape_file("../includes/road.shp");
+	
+	string building_path <- "../includes/building.shp";
+	string safe_zone_path <- "../includes/safe_zone.shp";
+	
+	geometry shape <- envelope(shape_file_roads);
+	
+	int total_evacuated <- 0; 
+	float average_congestion <- 0.0; 
+	
+	graph road_network; 
+	map<road, float> road_weights;
+	
+	init { 
+		 
+		create road from: shape_file_roads; 
+		road_network <- as_edge_graph(road); 
+		
+		//prevent unknown file 
+		if(file_exists("building_path") and file_exists("safe_zone_path	")){
+			create building from:  building_path; 
+			create safe_zone from: safe_zone_path; 
+		}else { 
+			//fallback 
+			do generate_synthetic_data; 
+		}
+		
+		
+		//spawn vehicle 
+		ask building {
+			create vehicle {
+				location <- myself.location;
+				target_zone <- one_of(safe_zone); 
+			}
+		}
+		
+		
+	}
+	// falback actions 
+		action generate_synthetic_data {
+			ask 50 among road { 
+				create building {location <- any_location_in(self.shape) + {rnd(-15,15), rnd(-15,15)}; }
+			}
+			ask 3 among road { 
+				create safe_zone {location <- first(self.shape.points);}
+			}
+		}
+		
+		
+		reflex recalculate when: every(5 #cycle){
+			road_weights <- road as_map (each :: (each.shape.perimeter * (1.0 + each.congestion))); 
+			average_congestion <- mean(road collect each.congestion);
+		}
+		
+	
+}
+
+// -------------------------------------------------------------
+// ENVIRONMENT & INFRASTRUCTURE SPECIES
+// -------------------------------------------------------------
+
+species road {
+    float capacity; 
+    int current_vehicles <- 0;  
+    float congestion <- 0.0; 
+
+    init { 
+        capacity <- max(1.0, shape.perimeter / 15.0 #m); 
+    }
+
+    reflex update_congestion { 
+        current_vehicles <- length(vehicle at_distance 2.0 #m); 
+        congestion <- min(1.0, current_vehicles / capacity); 
+    }
+
+    aspect base { 
+        rgb road_color <- (congestion > 0.7) ? #red : ((congestion > 0.3) ? #orange : #green);
+        draw shape color: road_color width: 2.5; 
+    }
+}
+
+species building {
+    aspect base {
+        draw square(12 #m) color: #gray border: #black;
+    }
+}
+
+species safe_zone {
+    aspect base {
+        // Draw a highly visible green exit zone
+        draw circle(20.0 #m) color: #lime border: #darkgreen;
+    }
+}
+
+// -------------------------------------------------------------
+// MOBILE ACTOR SPECIES
+// -------------------------------------------------------------
+
+species vehicle skills: [moving] {
+    rgb color <- #blue;  
+    float max_speed <- (40 + rnd(20)) #km/#h; // Evacuating fast!
+    safe_zone target_zone; 
+    point target_location;
+
+    init {
+        if (target_zone != nil) {
+            target_location <- target_zone.location;
+        }
+    }
+
+    reflex drive when: target_location != nil {
+        speed <- max_speed;
+        
+        // Evacuation routing based on current congestion
+        do goto target: target_location on: road_network move_weights: road_weights;  
+
+        // If they reach the safe zone, they are safe! Remove them from the map.
+        if (location distance_to target_location < 10.0 #m) { 
+            total_evacuated <- total_evacuated + 1;
+            do die; // Removes the agent from the simulation
+        }
+    }
+
+    aspect base {
+        draw triangle(5.0 #m) color: color rotate: heading + 90 border: #black; 
+    }	
+}
+
+// -------------------------------------------------------------
+// EXPERIMENT
+// -------------------------------------------------------------
+
+experiment EvacuationSim type: gui {
+    output { 
+        // Quick metrics at the top of the screen
+        monitor "Active Vehicles (Fleeing)" value: length(vehicle); 
+        monitor "Total Evacuated (Safe)" value: total_evacuated;
+        monitor "Avg Congestion" value: average_congestion;
+
+        // The Main 2D Map
+        display main_display type: opengl background: #black {
+            species road aspect: base; 
+            species building aspect: base;
+            species safe_zone aspect: base;
+            species vehicle aspect: base;  
+        }
+
+        // Live Analytics Dashboard
+        display Analytics refresh: every(5 #cycle) {
+            chart "Evacuation Progress" type: series style: line background: #white {
+                data "Fleeing Vehicles" value: length(vehicle) color: #red marker: false;
+                data "Safe Evacuees" value: total_evacuated color: #green marker: false;
+            }
+        }
+    }
+}
+
