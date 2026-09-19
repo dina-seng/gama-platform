@@ -1,0 +1,119 @@
+/**
+* Name: cheakach
+* Based on the internal empty template. 
+* Author: ADMIN
+* Tags: 
+*/
+
+
+model cheakach
+
+/* Insert your model definition here */
+
+global { 
+	
+	float cohesion_distance <- 15.0; 
+	float separation_distance <- 3.0; 
+	float alignment_distance <- 15.0; 
+	float panic_distance <- 15.0; 
+	
+	
+	init  { 
+		
+		create sheep number: 100 { 
+			location <- {rnd(50), rnd(50)};
+		}
+		
+		create obstacle number: 5 { 
+			location <- {rnd(50), rnd(50)}; 
+		}
+		
+		create dog number: 2 { 
+			location <- {rnd(50), rnd(50)}; 
+		}
+	}
+}
+
+species sheep skills: [moving] {
+	
+	
+	float speed <- 2.0; 
+	bool is_panicking <- false; 
+	
+	
+	reflex flee_dog { 
+		list<dog> nearby_dogs <- dog at_distance panic_distance;
+		
+		is_panicking <- length(nearby_dogs) > 0; 
+		
+		if( is_panicking) {
+			dog closest_dog <- nearby_dogs closest_to self; 
+			heading <- closest_dog.location towards location; 
+			do move;
+		}
+	}
+	
+	reflex flock when: !is_panicking {
+		
+		list<sheep> cohesion_neighbors <- sheep at_distance cohesion_distance;
+		list<sheep> alignment_neighbors <- sheep at_distance alignment_distance; 
+		list<sheep> separation_neighbors <- sheep at_distance separation_distance;
+		list<obstacle> nearby_obstacles <- obstacle at_distance 5.0; 
+		
+		float cohesion_heading <- heading; 
+		float alignment_heading <- heading; 
+		float separation_heading <- heading; 
+		float obstacle_heading <- heading; 
+		
+		if(length(cohesion_neighbors) > 0 ){ 
+			point average_location <- mean(cohesion_neighbors.location); 
+			cohesion_heading <- location towards average_location; 
+		}
+		
+		if(lenght(alignment_neighbors) >0 ) {
+			alignment_heading <- mean(alignment_neighbors.heading);
+		}
+		
+		if(lenght(separation_neighbors) > 0) { 
+			
+			list<float> separation_heading <- [];
+			
+			loop 5 over separation_neighbors { 
+				add item: (s.location towards location) to: separation_heading;
+			}
+			
+			separation_heading <- mean(separation_headning);
+			
+		}
+		
+		if (length(nearby_obstacls) > 0 ){
+			obstacle_heading <- nearby_obstacle closest_to self; 
+			obstacle_heading <- nearby_heading.location towards location; 
+		}
+			
+		heading <- mean([
+			cohesion_heading, 
+			alignment_heading, 
+			separation_heading, 
+			obstacle_heading
+		]);
+		
+		do move; 
+	}
+	
+	reflex trample { 
+		vegetation_cell current_cell <- vegetation_cell(location); 
+		
+		if( current_cell != nil) { 
+			ask current_cell { 
+				tramping_level <- tramping_level + 1.0;
+			}
+		}
+	}
+	
+	aspect base { 
+		draw circle color: #white
+	}
+	
+}
+
