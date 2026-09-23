@@ -1,0 +1,84 @@
+!SESSION 2026-09-23 12:14:51.040 -----------------------------------------------
+eclipse.buildId=${build.id}
+java.version=21.0.7
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_US
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -data @noDefault
+
+!ENTRY org.apache.log4j 4 0 2026-09-23 12:29:16.187
+!MESSAGE org.eclipse.xtext.ui.editor.hover.html.DefaultEObjectHoverProvider  - Error on computation of hover information. No hover information available for gaml.compiler.gaml.impl.S_GlobalImpl@fe66983 (key: global, firstFacet: null) at offset: 175, length: 6
+
+!STACK 0
+java.lang.NullPointerException: Cannot invoke "gama.gaml.interfaces.IGamlDescription.getTitle()" because the return value of "gaml.compiler.ui.hover.GamlHoverDocumentationProvider.getDoc(org.eclipse.emf.ecore.EObject)" is null
+	at gaml.compiler.ui.hover.GamlHoverDocumentationProvider.caseS_Global(GamlHoverDocumentationProvider.java:143)
+	at gaml.compiler.ui.hover.GamlHoverDocumentationProvider.caseS_Global(GamlHoverDocumentationProvider.java:1)
+	at gaml.compiler.gaml.util.GamlSwitch.doSwitch(GamlSwitch.java:157)
+	at gaml.compiler.ui.hover.GamlHoverDocumentationProvider.getDoc(GamlHoverDocumentationProvider.java:121)
+	at gaml.compiler.ui.hover.GamlHoverProvider.getHoverInfoAsHtml(GamlHoverProvider.java:263)
+	at org.eclipse.xtext.ui.editor.hover.html.DefaultEObjectHoverProvider.getHoverInfo(DefaultEObjectHoverProvider.java:96)
+	at org.eclipse.xtext.ui.editor.hover.html.DefaultEObjectHoverProvider$2.getInfo(DefaultEObjectHoverProvider.java:542)
+	at org.eclipse.xtext.ui.editor.hover.DispatchingEObjectTextHover.getHoverInfo(DispatchingEObjectTextHover.java:42)
+	at gaml.compiler.ui.hover.GamlHoverProvider$GamlDispatchingEObjectTextHover.getHoverInfo(GamlHoverProvider.java:117)
+	at org.eclipse.xtext.ui.editor.hover.AbstractEObjectHover$2.exec(AbstractEObjectHover.java:95)
+	at org.eclipse.xtext.ui.editor.hover.AbstractEObjectHover$2.exec(AbstractEObjectHover.java:1)
+	at org.eclipse.xtext.util.concurrent.IReadAccess.lambda$0(IReadAccess.java:57)
+	at org.eclipse.xtext.resource.OutdatedStateManager.exec(OutdatedStateManager.java:70)
+	at org.eclipse.xtext.ui.editor.model.XtextDocument$XtextDocumentLocker.internalReadOnly(XtextDocument.java:525)
+	at org.eclipse.xtext.ui.editor.model.XtextDocument$XtextDocumentLocker.readOnly(XtextDocument.java:497)
+	at org.eclipse.xtext.ui.editor.model.XtextDocument.readOnly(XtextDocument.java:136)
+	at org.eclipse.xtext.util.concurrent.IReadAccess.tryReadOnly(IReadAccess.java:53)
+	at org.eclipse.xtext.util.concurrent.IReadAccess.tryReadOnly(IReadAccess.java:71)
+	at org.eclipse.xtext.ui.editor.hover.AbstractEObjectHover.getHoverInfo2(AbstractEObjectHover.java:90)
+	at org.eclipse.jface.text.TextViewerHoverManager$1.run(TextViewerHoverManager.java:155)
+
+!ENTRY org.apache.log4j 4 0 2026-09-23 12:29:18.033
+!MESSAGE org.eclipse.xtext.ui.editor.hover.html.DefaultEObjectHoverProvider  - Error on computation of hover information. No hover information available for gaml.compiler.gaml.impl.S_GlobalImpl@3a07e1e8 (key: global, firstFacet: null) at offset: 175, length: 6
+
+!STACK 0
+java.lang.NullPointerException: Cannot invoke "gama.gaml.interfaces.IGamlDescription.getTitle()" because the return value of "gaml.compiler.ui.hover.GamlHoverDocumentationProvider.getDoc(org.eclipse.emf.ecore.EObject)" is null
+	at gaml.compiler.ui.hover.GamlHoverDocumentationProvider.caseS_Global(GamlHoverDocumentationProvider.java:143)
+	at gaml.compiler.ui.hover.GamlHoverDocumentationProvider.caseS_Global(GamlHoverDocumentationProvider.java:1)
+	at gaml.compiler.gaml.util.GamlSwitch.doSwitch(GamlSwitch.java:157)
+	at gaml.compiler.ui.hover.GamlHoverDocumentationProvider.getDoc(GamlHoverDocumentationProvider.java:121)
+	at gaml.compiler.ui.hover.GamlHoverProvider.getHoverInfoAsHtml(GamlHoverProvider.java:263)
+	at org.eclipse.xtext.ui.editor.hover.html.DefaultEObjectHoverProvider.getHoverInfo(DefaultEObjectHoverProvider.java:96)
+	at org.eclipse.xtext.ui.editor.hover.html.DefaultEObjectHoverProvider$2.getInfo(DefaultEObjectHoverProvider.java:542)
+	at org.eclipse.xtext.ui.editor.hover.DispatchingEObjectTextHover.getHoverInfo(DispatchingEObjectTextHover.java:42)
+	at gaml.compiler.ui.hover.GamlHoverProvider$GamlDispatchingEObjectTextHover.getHoverInfo(GamlHoverProvider.java:117)
+	at org.eclipse.xtext.ui.editor.hover.AbstractEObjectHover$2.exec(AbstractEObjectHover.java:95)
+	at org.eclipse.xtext.ui.editor.hover.AbstractEObjectHover$2.exec(AbstractEObjectHover.java:1)
+	at org.eclipse.xtext.util.concurrent.IReadAccess.lambda$0(IReadAccess.java:57)
+	at org.eclipse.xtext.resource.OutdatedStateManager.exec(OutdatedStateManager.java:70)
+	at org.eclipse.xtext.ui.editor.model.XtextDocument$XtextDocumentLocker.internalReadOnly(XtextDocument.java:525)
+	at org.eclipse.xtext.ui.editor.model.XtextDocument$XtextDocumentLocker.readOnly(XtextDocument.java:497)
+	at org.eclipse.xtext.ui.editor.model.XtextDocument.readOnly(XtextDocument.java:136)
+	at org.eclipse.xtext.util.concurrent.IReadAccess.tryReadOnly(IReadAccess.java:53)
+	at org.eclipse.xtext.util.concurrent.IReadAccess.tryReadOnly(IReadAccess.java:71)
+	at org.eclipse.xtext.ui.editor.hover.AbstractEObjectHover.getHoverInfo2(AbstractEObjectHover.java:90)
+	at org.eclipse.jface.text.TextViewerHoverManager$1.run(TextViewerHoverManager.java:155)
+
+!ENTRY org.apache.log4j 4 0 2026-09-23 12:29:26.217
+!MESSAGE org.eclipse.xtext.ui.editor.hover.html.DefaultEObjectHoverProvider  - Error on computation of hover information. No hover information available for gaml.compiler.gaml.impl.S_GlobalImpl@3c3848e1 (key: global, firstFacet: null) at offset: 175, length: 6
+
+!STACK 0
+java.lang.NullPointerException: Cannot invoke "gama.gaml.interfaces.IGamlDescription.getTitle()" because the return value of "gaml.compiler.ui.hover.GamlHoverDocumentationProvider.getDoc(org.eclipse.emf.ecore.EObject)" is null
+	at gaml.compiler.ui.hover.GamlHoverDocumentationProvider.caseS_Global(GamlHoverDocumentationProvider.java:143)
+	at gaml.compiler.ui.hover.GamlHoverDocumentationProvider.caseS_Global(GamlHoverDocumentationProvider.java:1)
+	at gaml.compiler.gaml.util.GamlSwitch.doSwitch(GamlSwitch.java:157)
+	at gaml.compiler.ui.hover.GamlHoverDocumentationProvider.getDoc(GamlHoverDocumentationProvider.java:121)
+	at gaml.compiler.ui.hover.GamlHoverProvider.getHoverInfoAsHtml(GamlHoverProvider.java:263)
+	at org.eclipse.xtext.ui.editor.hover.html.DefaultEObjectHoverProvider.getHoverInfo(DefaultEObjectHoverProvider.java:96)
+	at org.eclipse.xtext.ui.editor.hover.html.DefaultEObjectHoverProvider$2.getInfo(DefaultEObjectHoverProvider.java:542)
+	at org.eclipse.xtext.ui.editor.hover.DispatchingEObjectTextHover.getHoverInfo(DispatchingEObjectTextHover.java:42)
+	at gaml.compiler.ui.hover.GamlHoverProvider$GamlDispatchingEObjectTextHover.getHoverInfo(GamlHoverProvider.java:117)
+	at org.eclipse.xtext.ui.editor.hover.AbstractEObjectHover$2.exec(AbstractEObjectHover.java:95)
+	at org.eclipse.xtext.ui.editor.hover.AbstractEObjectHover$2.exec(AbstractEObjectHover.java:1)
+	at org.eclipse.xtext.util.concurrent.IReadAccess.lambda$0(IReadAccess.java:57)
+	at org.eclipse.xtext.resource.OutdatedStateManager.exec(OutdatedStateManager.java:70)
+	at org.eclipse.xtext.ui.editor.model.XtextDocument$XtextDocumentLocker.internalReadOnly(XtextDocument.java:525)
+	at org.eclipse.xtext.ui.editor.model.XtextDocument$XtextDocumentLocker.readOnly(XtextDocument.java:497)
+	at org.eclipse.xtext.ui.editor.model.XtextDocument.readOnly(XtextDocument.java:136)
+	at org.eclipse.xtext.util.concurrent.IReadAccess.tryReadOnly(IReadAccess.java:53)
+	at org.eclipse.xtext.util.concurrent.IReadAccess.tryReadOnly(IReadAccess.java:71)
+	at org.eclipse.xtext.ui.editor.hover.AbstractEObjectHover.getHoverInfo2(AbstractEObjectHover.java:90)
+	at org.eclipse.jface.text.TextViewerHoverManager$1.run(TextViewerHoverManager.java:155)
